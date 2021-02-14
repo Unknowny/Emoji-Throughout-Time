@@ -40,6 +40,10 @@ def open_image(emoji_name, path):
     except FileNotFoundError:
         pass
 
+    if not path:
+        from IPython.terminal.embed import embed; embed()
+        raise Exception(f'emoji {emoji_name!r} is not in emoji or custom_emoji dirs and has no path associated')
+
     if not path.startswith(('http:', 'https:')):
         return Image.open(path)
 
@@ -54,15 +58,15 @@ def open_image(emoji_name, path):
 
 
 def get_emoji_path(ej):
-    if ej in emoji.UNICODE_EMOJI:
+    if ej in emoji.UNICODE_EMOJI['en']:
         file = ej.encode('unicode_escape').decode()
         file = '-'.join(re.findall(r'\\[uU]0*([^\\]+)', file))
         if not file:
-            file = emoji.UNICODE_EMOJI[ej].strip(':')
+            file = emoji.UNICODE_EMOJI['en'][ej].strip(':')
             # TODO in this case use custom emoji dir?
         return join(settings.EMOJI_DIR, file + '.png')
     else:
-        join(settings.CUSTOM_EMOJI_DIR, emoji + '.png')
+        join(settings.CUSTOM_EMOJI_DIR, ej + '.png')
 
 
 def find_emoji_instances(df):
@@ -73,7 +77,7 @@ def find_emoji_instances(df):
         for ej in re.findall(EMOJI_RX, row.Text):
             yield (idx, ej, None)
 
-        for name, path in re.findall(r'<:(.*?):(.*?)>', row.Text):
+        for name, path in re.findall(r'<.?:(.*?):(.*?)>', row.Text):
             yield (idx, name, path)
     print(' done')
 

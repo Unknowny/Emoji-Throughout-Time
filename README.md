@@ -1,5 +1,5 @@
 # Emoji Throughout Time ![img](https://i.imgur.com/m3uZGO3.png)
-Visualisation from [this](https://www.reddit.com/r/dataisbeautiful/comments/8icg5x/personal_usage_of_emoji_animated_over_time_oc/) reddit /r/dataisbeautiful post.
+Visualization from [this](https://www.reddit.com/r/dataisbeautiful/comments/8icg5x/personal_usage_of_emoji_animated_over_time_oc/) reddit /r/dataisbeautiful post.
 
 ![img](https://i.imgur.com/OHhPC1u.gif)
 
@@ -19,9 +19,10 @@ timestamp,text
 timestamp,text
 ...
 ```
-Timestamp is a standard UTC timestamp. Script will scan over all records for emoji and custom emoji. Custom emoji must appear in text in the following form:  
+Timestamp is a standard UTC timestamp of when the text was posted / made. Script will search over all records for emoji and custom emoji. Custom emoji must appear in text in the following form:  
 `<:emoji-name:optional-filesystem-path-or-url>`  
 Custom emoji that don't have a path or url associated must be placed into `custom_emoji` directory as png images.
 
 ## Working with discord logs and custom emojis
-Previously I had a custom archiver script for discord but it has stopped working after the myriad of changes in discord API and the library I was using to access it. You can try your luck with https://github.com/Tyrrrz/DiscordChatExporter.
+You can use this https://github.com/hermit-crab/discord-export to export whatever needed. Afterwards you can run the `discord_convert.py` script to convert extracted data into digestible CSV `> python discord_convert.py database.jl > posts.csv`.
+- Message reactions are also taken into account unless you disabled their extraction.
